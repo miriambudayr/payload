@@ -1,5 +1,5 @@
 import type { PlaywrightTestConfig } from '@playwright/test'
-
+import { devices as replayDevices, replayReporter } from '@replayio/playwright'
 export const EXPECT_TIMEOUT = 45000
 export const POLL_TOPASS_TIMEOUT = EXPECT_TIMEOUT * 4 // That way expect.poll() or expect().toPass can retry 4 times. 4x higher than default expect timeout => can retry 4 times if retryable expects are used inside
 
@@ -17,5 +17,18 @@ const config: PlaywrightTestConfig = {
     timeout: 10000,
   },
   workers: 16,
+  reporter: [
+    replayReporter({
+      apiKey: process.env.REPLAY_API_KEY,
+      upload: true,
+    }),
+    ['line'],
+  ],
+  projects: [
+    {
+      name: 'replay-chromium',
+      use: { ...replayDevices['Replay Chromium'] },
+    },
+  ],
 }
 export default config
