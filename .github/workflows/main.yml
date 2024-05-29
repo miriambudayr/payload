@@ -216,7 +216,7 @@ jobs:
           retry_on: error
           max_attempts: 2
           timeout_minutes: 15
-          command: pnpm test:e2e --part ${{ matrix.part }} --bail
+          command: REPLAY_API_KEY=${{ secrets.REPLAY_API_KEY }} pnpm test:e2e --part ${{ matrix.part }} --bail
 
       - uses: actions/upload-artifact@v3
         if: always()

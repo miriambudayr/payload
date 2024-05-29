@@ -69,7 +69,10 @@ function executePlaywright(suitePath: string, bail = false) {
     `${bail ? 'playwright.bail.config.ts' : 'playwright.config.ts'}`,
   )
 
-  const cmd = slash(`${playwrightBin} test ${suitePath} -c ${playwrightCfg}`)
+  const cmd = !!process.env.REPLAY
+    ? slash(`${playwrightBin} test ${suitePath} -c ${playwrightCfg}`)
+    : slash(`${playwrightBin} test ${suitePath} --project replay-chromium`)
+
   console.log('\n', cmd)
   const { stdout, code } = shelljs.exec(cmd)
   const suite = path.basename(path.dirname(suitePath))
